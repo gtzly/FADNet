@@ -1,6 +1,8 @@
 # FADNet
 Implementation for Monocular 3D Object Detection with Sequential Feature Association and Depth Hint Augmentation.
-For now, we only release the testing code
+For now, we only release the testing code and the pretrained model that yields the reported performance on KITTI3D test set. 
+The training codes and more pretrained models will be released.
+Some of the codes in this repository are borrowed from [SMOKE](https://github.com/lzccccc/SMOKE), [CenterNet](https://github.com/xingyizhou/CenterNet), and [3D BoundingBox](https://github.com/skhadem/3D-BoundingBox).
 
 
 
@@ -36,12 +38,12 @@ For now, we only release the testing code
 `$ bash ./make.sh`  
 
 - Download the pretrained [model](https://drive.google.com/file/d/1xaqoG8WgJS5VC-5HsCN0jVPH4LpHlVhH/view?usp=sharing) and put it under a folder named as 'checkpoint'.  
-`$ cd ../../..`
-`$ mkdir checkpoint`
+`$ cd ../../..`  
+`$ mkdir checkpoint`  
 `$ mv final.pth checkpoint`
 
 # Getting Started  
-- Running FADNet on KITTI3D test set with the pretrained model.
+- Running FADNet on KITTI3D test set with the pretrained model.  
 `$ python scripts/test.py`
 
 - Visualize the detection results.  
@@ -62,11 +64,7 @@ However, this is strongly discouraged by the KITTI official team to prevent the 
 
 - Check the qualitative results under ./output/vis_test
 
-#Acknowledgement
+# Acknowledgement
 - [SMOKE](https://github.com/lzccccc/SMOKE)
 - [CenterNet](https://github.com/xingyizhou/CenterNet)
 - [3D BoundingBox](https://github.com/skhadem/3D-BoundingBox)
-
-# Citation
-
-if you find
