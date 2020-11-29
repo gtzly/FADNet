@@ -30,12 +30,7 @@ class OutputDecoder():
 
         return depth
 
-    def decode_location(self,
-                        points,
-                        points_offset,
-                        depths,
-                        calibs,
-                        trans_mats):
+    def decode_location(self,points,points_offset,depths,calibs,trans_mats):
         device = points.device
 
         calibs = calibs.to(device=device)
@@ -109,23 +104,23 @@ class OutputDecoder():
 
         trans_mats_inv = trans_mats.inverse()[obj_id]
 
-        assert points_3d.shape[0] == N # N=batch_size*30
-        proj_2d_points = points_3d.float() + points_2d_offsets # （N，2）
-        dims_2d=dims_2d.view(-1,2) # (batch_size,30,2)->(N,2)
-        top_left = proj_2d_points - dims_2d / 2.              # x1, y1
-        bottom_right = proj_2d_points + dims_2d / 2.          # x2, y2
+        assert points_3d.shape[0] == N 
+        proj_2d_points = points_3d.float() + points_2d_offsets 
+        dims_2d=dims_2d.view(-1,2) 
+        top_left = proj_2d_points - dims_2d / 2.            
+        bottom_right = proj_2d_points + dims_2d / 2.         
 
         # transform project points in homogeneous form.
         top_left_extend = torch.cat(
-            (top_left, torch.ones(N, 1).to(device=device)), dim=1) # (N,2) -> (N,3)
+            (top_left, torch.ones(N, 1).to(device=device)), dim=1)
         bottom_right_extend = torch.cat(
             (bottom_right, torch.ones(N, 1).to(device=device)), dim=1)
 
-        top_left_extend = top_left_extend.unsqueeze(-1) # (N,3)->(N,3，1)
+        top_left_extend = top_left_extend.unsqueeze(-1)
         bottom_right_extend = bottom_right_extend.unsqueeze(-1)
 
         # transform project points back on image
-        top_left_img = torch.matmul(trans_mats_inv, top_left_extend).squeeze(-1)[:, :2]  # (N,3,1)->(N,3)->(N,2)
+        top_left_img = torch.matmul(trans_mats_inv, top_left_extend).squeeze(-1)[:, :2]
         bottom_right_img = torch.matmul(trans_mats_inv, bottom_right_extend).squeeze(-1)[:, :2]
 
         bbox_corner=torch.cat((top_left_img,bottom_right_img),dim=1) # （N，4）
